@@ -25,7 +25,8 @@ class Calculator_TDDTests: XCTestCase {
         self.viewController.endAppearanceTransition()
     }
     
-    func testOnPushedOneTest() {
+    /* 数字 */
+    func testOnPushedOne() {
         viewController.onPushedOne()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "1", "One OnPushedOne is incorrect")
@@ -42,7 +43,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "1112", "Triple OnPushedOne and One OnPushedTwo are incorrect")
     }
-    func testOnPushedTwoTest() {
+    func testOnPushedTwo() {
         viewController.onPushedTwo()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "2", "One OnPushedTwo is incorrect")
@@ -59,7 +60,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "2221", "Triple OnPushedTwo and One OnPushedOne are incorrect")
     }
-    func testOnPushedThreeTest() {
+    func testOnPushedThree() {
         viewController.onPushedThree()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "3", "One OnPushedThree is incorrect")
@@ -76,7 +77,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "3332", "Triple OnPushedThree and One OnPushedTwo are incorrect")
     }
-    func testOnPushedFourTest() {
+    func testOnPushedFour() {
         viewController.onPushedFour()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "4", "One OnPushedFour is incorrect")
@@ -110,7 +111,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "5554", "Triple OnPushedFive and One OnPushedFour are incorrect")
     }
-    func testOnPushedSixTest() {
+    func testOnPushedSix() {
         viewController.onPushedSix()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "6", "One OnPushedSix is incorrect")
@@ -127,7 +128,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "6665", "Triple OnPushedSix and One OnPushedFive are incorrect")
     }
-    func testOnPushedSevenTest() {
+    func testOnPushedSeven() {
         viewController.onPushedSeven()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "7", "One OnPushedSeven is incorrect")
@@ -144,7 +145,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "7776", "Triple OnPushedSeven and One OnPushedSix are incorrect")
     }
-    func testOnPushedEightTest() {
+    func testOnPushedEight() {
         viewController.onPushedEight()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "8", "One OnPushedEight is incorrect")
@@ -161,7 +162,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "8887", "Triple OnPushedEight and One OnPushedSeven are incorrect")
     }
-    func testOnPushedNineTest() {
+    func testOnPushedNine() {
         viewController.onPushedNine()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "9", "One OnPushedNight is incorrect")
@@ -178,7 +179,7 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "9998", "Triple OnPushedNine and One OnPushedEight are incorrect")
     }
-    func testOnPushedZeroTest() {
+    func testOnPushedZero() {
         viewController.onPushedZero()
         var result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "0", "One OnPushedZero is incorrect")
@@ -191,6 +192,24 @@ class Calculator_TDDTests: XCTestCase {
         viewController.onPushedZero()
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "100", "One OnPushedOne and Two OnPushedZero are incorrect")
+    }
+    
+    /* その他(AC, ±, %) */
+    func testOnPushedAllClear() {
+        viewController.onPushedAllClear()
+        var result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "One OnPushedAllClear is incorrect")
+        
+        viewController.onPushedOne()
+        viewController.onPushedAllClear()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "One OnPushedOne and OnPushedAllClear are incorrect")
+        
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedAllClear()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "One OnPushedOne and One OnPushedTwo and OnPushedAllClear are incorrect")
 
     }
 }

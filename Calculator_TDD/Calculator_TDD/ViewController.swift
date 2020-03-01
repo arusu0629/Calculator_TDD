@@ -65,6 +65,7 @@ class ViewController: UIViewController {
     
     /* その他 (AC, ±, %) */
     @IBAction func pushedAllClear(_ sender: Any) {
+        onPushedAllClear()
     }
     @IBAction func pushedPlusMinus(_ sender: Any) {
     }
@@ -111,6 +112,11 @@ class ViewController: UIViewController {
     func onPushedZero() {
         RemoveTextIfZeroOnly()
         self.numLabel.text?.append("0")
+    }
+    
+    /* その他(AC, ±, %) のアクションメソッド */
+    func onPushedAllClear() {
+        self.numLabel.text? = "0"
     }
 
     func RemoveTextIfZeroOnly() {
