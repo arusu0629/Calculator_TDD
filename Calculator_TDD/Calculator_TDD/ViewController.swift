@@ -70,6 +70,7 @@ class ViewController: UIViewController {
     @IBAction func pushedPlusMinus(_ sender: Any) {
     }
     @IBAction func pushedPercent(_ sender: Any) {
+        onPushedPercent()
     }
     
     /* OnPushed アクションメソッド */
@@ -117,6 +118,18 @@ class ViewController: UIViewController {
     /* その他(AC, ±, %) のアクションメソッド */
     func onPushedAllClear() {
         self.numLabel.text? = "0"
+    }
+    func onPushedPercent() {
+        if self.numLabel.text == "0" {
+            return
+        }
+        guard let inputtingText = numLabel.text else {
+            return
+        }
+        guard let inputtingNumber = Double(inputtingText) else {
+            return
+        }
+        numLabel.text? = String(inputtingNumber / 100.0)
     }
 
     func RemoveTextIfZeroOnly() {

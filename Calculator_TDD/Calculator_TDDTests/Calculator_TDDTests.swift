@@ -210,6 +210,30 @@ class Calculator_TDDTests: XCTestCase {
         viewController.onPushedAllClear()
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "0", "One OnPushedOne and One OnPushedTwo and OnPushedAllClear are incorrect")
+    }
+    
+    func testOnPushedPercent() {
+        viewController.onPushedPercent()
+        var result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "One OnPushedPercent is incorrect")
+        
+        viewController.onPushedOne()
+        viewController.onPushedPercent()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.01", "One OnPushedOne and One OnPushedPercent are incorrect")
+        
+        viewController.onPushedAllClear()
+        viewController.onPushedOne()
+        viewController.onPushedPercent()
+        viewController.onPushedPercent()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.0001", "One OnPushedOne and Two OnPushedPercent are incorrect")
 
+        viewController.onPushedAllClear()
+        viewController.onPushedOne()
+        viewController.onPushedNine()
+        viewController.onPushedPercent()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.19", "One OnPushedOne and One OnPushedNine and One OnPushedPercent are incorrect")
     }
 }
