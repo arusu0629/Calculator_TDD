@@ -13,13 +13,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var numLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
     /* 数字 */
     @IBAction func pushedZero(_ sender: Any) {
     }
     @IBAction func pushedOne(_ sender: Any) {
+        onPushedOne()
     }
     @IBAction func pushedTwo(_ sender: Any) {
     }
@@ -60,5 +60,20 @@ class ViewController: UIViewController {
     @IBAction func pushedPlusMinus(_ sender: Any) {
     }
     @IBAction func pushedPercent(_ sender: Any) {
+    }
+    
+    /* OnPushed アクションメソッド */
+    func onPushedOne() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("1")
+    }
+
+    func RemoveTextIfZeroOnly() {
+        guard let text = self.numLabel.text else {
+            return
+        }
+        if text == "0" {
+            self.numLabel.text? = ""
+        }
     }
 }
