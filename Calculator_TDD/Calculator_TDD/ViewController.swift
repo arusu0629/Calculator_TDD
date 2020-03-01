@@ -16,26 +16,35 @@ class ViewController: UIViewController {
     }
     
     /* 数字 */
-    @IBAction func pushedZero(_ sender: Any) {
-    }
     @IBAction func pushedOne(_ sender: Any) {
         onPushedOne()
     }
     @IBAction func pushedTwo(_ sender: Any) {
+        onPushedTwo()
     }
     @IBAction func pushedThree(_ sender: Any) {
+        onPushedThree()
     }
     @IBAction func pushedFour(_ sender: Any) {
+        onPushedFour()
     }
     @IBAction func pushedFive(_ sender: Any) {
+        onPushedFive()
     }
     @IBAction func pushedSix(_ sender: Any) {
+        onPushedSix()
     }
     @IBAction func pushedSeven(_ sender: Any) {
+        onPushedSeven()
     }
     @IBAction func pushedEight(_ sender: Any) {
+        onPushedEight()
     }
     @IBAction func pushedNine(_ sender: Any) {
+        onPushedNine()
+    }
+    @IBAction func pushedZero(_ sender: Any) {
+        onPushedZero()
     }
     
     /* 小数点(.) */
@@ -66,6 +75,42 @@ class ViewController: UIViewController {
     func onPushedOne() {
         RemoveTextIfZeroOnly()
         self.numLabel.text?.append("1")
+    }
+    func onPushedTwo() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("2")
+    }
+    func onPushedThree() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("3")
+    }
+    func onPushedFour() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("4")
+    }
+    func onPushedFive() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("5")
+    }
+    func onPushedSix() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("6")
+    }
+    func onPushedSeven() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("7")
+    }
+    func onPushedEight() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("8")
+    }
+    func onPushedNine() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("9")
+    }
+    func onPushedZero() {
+        RemoveTextIfZeroOnly()
+        self.numLabel.text?.append("0")
     }
 
     func RemoveTextIfZeroOnly() {
