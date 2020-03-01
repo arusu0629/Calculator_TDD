@@ -68,6 +68,7 @@ class ViewController: UIViewController {
         onPushedAllClear()
     }
     @IBAction func pushedPlusMinus(_ sender: Any) {
+        onPushedPlusMinus()
     }
     @IBAction func pushedPercent(_ sender: Any) {
         onPushedPercent()
@@ -75,43 +76,43 @@ class ViewController: UIViewController {
     
     /* OnPushed アクションメソッド */
     func onPushedOne() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("1")
     }
     func onPushedTwo() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("2")
     }
     func onPushedThree() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("3")
     }
     func onPushedFour() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("4")
     }
     func onPushedFive() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("5")
     }
     func onPushedSix() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("6")
     }
     func onPushedSeven() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("7")
     }
     func onPushedEight() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("8")
     }
     func onPushedNine() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("9")
     }
     func onPushedZero() {
-        RemoveTextIfZeroOnly()
+        RemoveZeroIfOnly()
         self.numLabel.text?.append("0")
     }
     
@@ -131,13 +132,37 @@ class ViewController: UIViewController {
         }
         numLabel.text? = String(inputtingNumber / 100.0)
     }
-
-    func RemoveTextIfZeroOnly() {
-        guard let text = self.numLabel.text else {
+    func onPushedPlusMinus() {
+        guard var inputtingText = numLabel.text else {
             return
         }
-        if text == "0" {
-            self.numLabel.text? = ""
+        if inputtingText.first == "-" {
+            inputtingText.remove(at: inputtingText.startIndex)
+        } else {
+            inputtingText.insert("-", at: inputtingText.startIndex)
+        }
+        self.numLabel.text = inputtingText
+    }
+
+    func RemoveZeroIfOnly() {
+        guard var text = self.numLabel.text else {
+            return
+        }
+        
+        if !text.contains("0") {
+            return
+        }
+        
+        // 先頭が "0" の場合は "0" を消す
+        if text.first == "0" {
+            self.numLabel.text?.remove(at: text.startIndex)
+            return
+        }
+        
+        // 先頭が "-" でその次が "0" の場合は "0" を消す
+        let zeroIndex = text.index(text.startIndex, offsetBy: 1)
+        if text.removeFirst() == "-" && text.removeFirst() == "0" {
+            self.numLabel.text?.remove(at: zeroIndex)
         }
     }
 }
