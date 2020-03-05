@@ -372,6 +372,7 @@
                     </view>
                     <connections>
                         <outlet property="additionButton" destination="UA1-M1-9Cq" id="7RT-8t-mKC"/>
+                        <outlet property="divisionButton" destination="7CQ-z8-3sE" id="0Fv-T8-TfZ"/>
                         <outlet property="multiplicationButton" destination="L5L-8m-8Q7" id="42k-in-ED3"/>
                         <outlet property="numLabel" destination="MF2-Jo-JrZ" id="el9-7i-aDl"/>
                         <outlet property="subtractionButton" destination="pOG-of-QWu" id="JdW-Q8-owl"/>

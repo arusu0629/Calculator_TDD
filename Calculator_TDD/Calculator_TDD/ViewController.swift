@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var additionButton: UIButton!
     @IBOutlet weak var subtractionButton: UIButton!
     @IBOutlet weak var multiplicationButton: UIButton!
+    @IBOutlet weak var divisionButton: UIButton!
     
     // 入力中の数値が小数かどうか
     var hasDecimalPointInNumLabel: Bool {
@@ -83,6 +84,7 @@ class ViewController: UIViewController {
         onPushedMultiplication()
     }
     @IBAction func pushedDivision(_ sender: Any) {
+        onPushedDivision()
     }
     
     /* その他 (AC, ±, %) */
@@ -166,6 +168,28 @@ class ViewController: UIViewController {
                 result = self.firstInputtedNum * inputtingNum
             }
             break
+        case "/":
+            if let secondInputtedNum = self.secondInputtedNum {
+                if secondInputtedNum == 0 {
+                    self.numLabel.text = "エラー"
+                    unSelectedNumOperationsButton()
+                    canAppendDigit = false
+                    return
+                } else {
+                    result = inputtingNum / secondInputtedNum
+                }
+            } else {
+                if inputtingNum == 0 {
+                    self.numLabel.text = "エラー"
+                    unSelectedNumOperationsButton()
+                    canAppendDigit = false
+                    self.secondInputtedNum = inputtingNum
+                    return
+                } else {
+                    result = self.firstInputtedNum / inputtingNum
+                }
+            }
+            break
         default:
             break
         }
@@ -199,40 +223,29 @@ class ViewController: UIViewController {
     
     /* 四則演算 のアクションメソッド */
     func onPushedAddition() {
-        if self.additionButton.isSelected {
-            return
-        }
-        self.additionButton.isSelected = true
-        setLastPushedNumOperation("+")
-        onPushedNumOperationButtons()
+        onPushedNumOperationButtons(operationButton: self.additionButton, operation: "+")
     }
     func onPushedSubtraction() {
-        if self.subtractionButton.isSelected {
-            return
-        }
-        self.subtractionButton.isSelected = true
-        setLastPushedNumOperation("-")
-        onPushedNumOperationButtons()
+        onPushedNumOperationButtons(operationButton: self.subtractionButton, operation: "-")
     }
     func onPushedMultiplication() {
-        if self.multiplicationButton.isSelected {
+        onPushedNumOperationButtons(operationButton: self.multiplicationButton, operation: "*")
+    }
+    func onPushedDivision() {
+        onPushedNumOperationButtons(operationButton: self.divisionButton, operation: "/")
+    }
+
+    func onPushedNumOperationButtons(operationButton: UIButton, operation: String) {
+        if operationButton.isSelected {
             return
         }
-        self.multiplicationButton.isSelected = true
-        setLastPushedNumOperation("*")
-        onPushedNumOperationButtons()
-    }
-    
-    func setLastPushedNumOperation(_ operation: String) {
-        self.lastPushedOperation = operation
-    }
-    
-    func onPushedNumOperationButtons() {
+        operationButton.isSelected = true
         self.secondInputtedNum = nil
         self.canAppendDigit = false
+        self.lastPushedOperation = operation
         saveInputingNumber()
     }
-    
+
     func saveInputingNumber() {
         self.firstInputtedNum = convertLabelToDouble(str: self.numLabel.text)
     }
@@ -301,6 +314,9 @@ class ViewController: UIViewController {
         }
         if multiplicationButton.isSelected {
             multiplicationButton.isSelected = false
+        }
+        if divisionButton.isSelected {
+            divisionButton.isSelected = false
         }
     }
 

@@ -581,4 +581,88 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "0", "1212 * 0 = is incorrect")
     }
+    
+    func testOnPushedDivision() {
+        // 6 / 3 = -> 2
+        viewController.onPushedSix()
+        viewController.onPushedDivision()
+        viewController.onPushedThree()
+        viewController.onPushedEqual()
+        var result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "2", "6 / 3 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 3 / 6 = -> 0.5
+        viewController.onPushedThree()
+        viewController.onPushedDivision()
+        viewController.onPushedSix()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.5", "3 / 6 = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 2 / = -> 1
+        viewController.onPushedTwo()
+        viewController.onPushedDivision()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "1", "2 / = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 2 / = = -> 0.5
+        viewController.onPushedTwo()
+        viewController.onPushedDivision()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.5", "2 / = = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 7 / 0 = -> エラー
+        viewController.onPushedSeven()
+        viewController.onPushedDivision()
+        viewController.onPushedZero()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "エラー", "7 / 0 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 7 / 0 = 7 = -> エラー
+        viewController.onPushedSeven()
+        viewController.onPushedDivision()
+        viewController.onPushedZero()
+        viewController.onPushedEqual()
+        viewController.onPushedSeven()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "エラー", "7 / 0 = 7 = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 45 / 6 = -> 7.5
+        viewController.onPushedFour()
+        viewController.onPushedFive()
+        viewController.onPushedDivision()
+        viewController.onPushedSix()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "7.5", "45 / 6 = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 18 / 25 = -> 0.72
+        viewController.onPushedOne()
+        viewController.onPushedEight()
+        viewController.onPushedDivision()
+        viewController.onPushedTwo()
+        viewController.onPushedFive()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.72", "18 / 25 = is incorrect")
+    }
 }
