@@ -449,4 +449,136 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "-29", "35 - = 6 = is incorrect")
     }
+    
+    func testOnPushedMultiplication() {
+        // 4 * 2 = -> 8
+        viewController.onPushedFour()
+        viewController.onPushedMultiplication()
+        viewController.onPushedTwo()
+        viewController.onPushedEqual()
+        var result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "8", "4 * 2 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 2 * 4 = -> 8
+        viewController.onPushedTwo()
+        viewController.onPushedMultiplication()
+        viewController.onPushedFour()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "8", "2 * 4 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 3 * -6 = -> -18
+        viewController.onPushedThree()
+        viewController.onPushedMultiplication()
+        viewController.onPushedSix()
+        viewController.onPushedPlusMinus()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-18", "3 * -6 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // -6 * 3 = -> -18
+        viewController.onPushedSix()
+        viewController.onPushedPlusMinus()
+        viewController.onPushedMultiplication()
+        viewController.onPushedThree()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-18", "-6 * 3 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // -6 * -3 = -> -18
+        viewController.onPushedSix()
+        viewController.onPushedPlusMinus()
+        viewController.onPushedMultiplication()
+        viewController.onPushedThree()
+        viewController.onPushedPlusMinus()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "18", "-6 * -3 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 3 * = -> 9
+        viewController.onPushedThree()
+        viewController.onPushedMultiplication()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "9", "3 * = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 4 * = = -> 64
+        viewController.onPushedFour()
+        viewController.onPushedMultiplication()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "64", "4 * = = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 11 * = -> 121
+        viewController.onPushedOne()
+        viewController.onPushedOne()
+        viewController.onPushedMultiplication()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "121", "11 * = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 11 * = = -> 1331
+        viewController.onPushedOne()
+        viewController.onPushedOne()
+        viewController.onPushedMultiplication()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "1331", "11 * = = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 35 * = 6 = -> 210
+        viewController.onPushedThree()
+        viewController.onPushedFive()
+        viewController.onPushedMultiplication()
+        viewController.onPushedEqual()
+        viewController.onPushedSix()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "210", "35 * = 6 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 35 * = 6 = = -> 210
+        viewController.onPushedThree()
+        viewController.onPushedFive()
+        viewController.onPushedMultiplication()
+        viewController.onPushedEqual()
+        viewController.onPushedSix()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "7350", "35 * = 6 = = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 1212 * 0 = -> 0
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedMultiplication()
+        viewController.onPushedZero()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "1212 * 0 = is incorrect")
+    }
 }

@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var numLabel: UILabel!
     @IBOutlet weak var additionButton: UIButton!
     @IBOutlet weak var subtractionButton: UIButton!
+    @IBOutlet weak var multiplicationButton: UIButton!
     
     // 入力中の数値が小数かどうか
     var hasDecimalPointInNumLabel: Bool {
@@ -79,6 +80,7 @@ class ViewController: UIViewController {
         onPushedSubtraction()
     }
     @IBAction func pushedMultiplication(_ sender: Any) {
+        onPushedMultiplication()
     }
     @IBAction func pushedDivision(_ sender: Any) {
     }
@@ -157,6 +159,13 @@ class ViewController: UIViewController {
                 result = self.firstInputtedNum - inputtingNum
             }
             break
+        case "*":
+            if let secondInputtedNum = self.secondInputtedNum {
+                result = inputtingNum * secondInputtedNum
+            } else {
+                result = self.firstInputtedNum * inputtingNum
+            }
+            break
         default:
             break
         }
@@ -203,6 +212,14 @@ class ViewController: UIViewController {
         }
         self.subtractionButton.isSelected = true
         setLastPushedNumOperation("-")
+        onPushedNumOperationButtons()
+    }
+    func onPushedMultiplication() {
+        if self.multiplicationButton.isSelected {
+            return
+        }
+        self.multiplicationButton.isSelected = true
+        setLastPushedNumOperation("*")
         onPushedNumOperationButtons()
     }
     
@@ -281,6 +298,9 @@ class ViewController: UIViewController {
         }
         if subtractionButton.isSelected {
             subtractionButton.isSelected = false
+        }
+        if multiplicationButton.isSelected {
+            multiplicationButton.isSelected = false
         }
     }
 
