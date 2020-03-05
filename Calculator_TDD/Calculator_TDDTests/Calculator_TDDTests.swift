@@ -340,4 +340,113 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "41", " 35 + = 6 = is incorrect")
     }
+    
+    func testOnPushedSubtraction() {
+        // 2 - 1 = -> 1
+        viewController.onPushedTwo()
+        viewController.onPushedSubtraction()
+        viewController.onPushedOne()
+        viewController.onPushedEqual()
+        var result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "1", "2 - 1 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 1 - 2 = -> -1
+        viewController.onPushedOne()
+        viewController.onPushedSubtraction()
+        viewController.onPushedTwo()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-1", "1 - 2 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 35 - 12 = -> 23
+        viewController.onPushedThree()
+        viewController.onPushedFive()
+        viewController.onPushedSubtraction()
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "23", "35 - 12 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 12 - 35 = -> -23
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedSubtraction()
+        viewController.onPushedThree()
+        viewController.onPushedFive()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-23", "12 - 35 = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 4 - = -> 0
+        viewController.onPushedFour()
+        viewController.onPushedSubtraction()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "4 - = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 4 - = = -> -4
+        viewController.onPushedFour()
+        viewController.onPushedSubtraction()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-4", "4 - = = is incorrect")
+        
+        viewController.onPushedAllClear()
+        
+        // 12 - = -> 0
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedSubtraction()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0", "12 - = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 12 - = = -> -12
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedSubtraction()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-12", "12 - = = is incorrect")
+        
+        viewController.onPushedAllClear()
+
+        // 12 - = = = = -> -36
+        viewController.onPushedOne()
+        viewController.onPushedTwo()
+        viewController.onPushedSubtraction()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-36", "12 - = = = = is incorrect")
+
+        viewController.onPushedAllClear()
+        
+        // 35 - = 6 = -> -29
+        viewController.onPushedThree()
+        viewController.onPushedFive()
+        viewController.onPushedSubtraction()
+        viewController.onPushedEqual()
+        viewController.onPushedSix()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "-29", "35 - = 6 = is incorrect")
+    }
 }

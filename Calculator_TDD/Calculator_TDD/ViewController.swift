@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var numLabel: UILabel!
     @IBOutlet weak var additionButton: UIButton!
+    @IBOutlet weak var subtractionButton: UIButton!
     
     // 入力中の数値が小数かどうか
     var hasDecimalPointInNumLabel: Bool {
@@ -75,6 +76,7 @@ class ViewController: UIViewController {
         onPushedAddition()
     }
     @IBAction func pushedSubtraction(_ sender: Any) {
+        onPushedSubtraction()
     }
     @IBAction func pushedMultiplication(_ sender: Any) {
     }
@@ -146,7 +148,14 @@ class ViewController: UIViewController {
         let inputtingNum = convertLabelToDouble(str: self.numLabel.text)
         switch self.lastPushedOperation {
         case "+":
-            result = inputtingNum + (self.secondInputtedNum ?? self.firstInputtedNum)
+            result = (self.secondInputtedNum ?? self.firstInputtedNum) + inputtingNum
+            break
+        case "-":
+            if let secondInputtedNum = self.secondInputtedNum {
+                result = inputtingNum - secondInputtedNum
+            } else {
+                result = self.firstInputtedNum - inputtingNum
+            }
             break
         default:
             break
@@ -185,7 +194,23 @@ class ViewController: UIViewController {
             return
         }
         self.additionButton.isSelected = true
-        self.lastPushedOperation = "+"
+        setLastPushedNumOperation("+")
+        onPushedNumOperationButtons()
+    }
+    func onPushedSubtraction() {
+        if self.subtractionButton.isSelected {
+            return
+        }
+        self.subtractionButton.isSelected = true
+        setLastPushedNumOperation("-")
+        onPushedNumOperationButtons()
+    }
+    
+    func setLastPushedNumOperation(_ operation: String) {
+        self.lastPushedOperation = operation
+    }
+    
+    func onPushedNumOperationButtons() {
         self.secondInputtedNum = nil
         self.canAppendDigit = false
         saveInputingNumber()
@@ -202,6 +227,7 @@ class ViewController: UIViewController {
         self.firstInputtedNum = 0.0
         self.secondInputtedNum = nil
         self.canAppendDigit = true
+        self.unSelectedNumOperationsButton()
     }
     func onPushedPercent() {
         if self.numLabel.text == "0" {
@@ -252,6 +278,9 @@ class ViewController: UIViewController {
     func unSelectedNumOperationsButton() {
         if additionButton.isSelected {
             additionButton.isSelected = false
+        }
+        if subtractionButton.isSelected {
+            subtractionButton.isSelected = false
         }
     }
 

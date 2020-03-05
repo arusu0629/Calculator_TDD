@@ -373,6 +373,7 @@
                     <connections>
                         <outlet property="additionButton" destination="UA1-M1-9Cq" id="7RT-8t-mKC"/>
                         <outlet property="numLabel" destination="MF2-Jo-JrZ" id="el9-7i-aDl"/>
+                        <outlet property="subtractionButton" destination="pOG-of-QWu" id="JdW-Q8-owl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
