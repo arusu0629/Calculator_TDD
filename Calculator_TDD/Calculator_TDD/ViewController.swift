@@ -11,6 +11,22 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var numLabel: UILabel!
+    @IBOutlet weak var additionButton: UIButton!
+    
+    // 入力中の数値が小数かどうか
+    var hasDecimalPointInNumLabel: Bool {
+        return numLabel.text?.contains(".") ?? false
+    }
+    
+    // 入力した数字をラベルの末尾に追加するかどうかのフラグ
+    var canAppendDigit = true
+    
+    // 最後に押された四則演算記号
+    var lastPushedOperation: String = "None"
+    
+    var firstInputtedNum: Double = 0.0
+    var secondInputtedNum: Double? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -53,8 +69,10 @@ class ViewController: UIViewController {
     
     /* イコールと四則演算 */
     @IBAction func pushedEqual(_ sender: Any) {
+        onPushedEqual()
     }
     @IBAction func pushedAddition(_ sender: Any) {
+        onPushedAddition()
     }
     @IBAction func pushedSubtraction(_ sender: Any) {
     }
@@ -76,49 +94,114 @@ class ViewController: UIViewController {
     
     /* OnPushed アクションメソッド */
     func onPushedOne() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("1")
+        appendDigit(str: "1")
     }
     func onPushedTwo() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("2")
+        appendDigit(str: "2")
     }
     func onPushedThree() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("3")
+        appendDigit(str: "3")
     }
     func onPushedFour() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("4")
+        appendDigit(str: "4")
     }
     func onPushedFive() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("5")
+        appendDigit(str: "5")
     }
     func onPushedSix() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("6")
+        appendDigit(str: "6")
     }
     func onPushedSeven() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("7")
+        appendDigit(str: "7")
     }
     func onPushedEight() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("8")
+        appendDigit(str: "8")
     }
     func onPushedNine() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("9")
+        appendDigit(str: "9")
     }
     func onPushedZero() {
-        RemoveZeroIfOnly()
-        self.numLabel.text?.append("0")
+        appendDigit(str: "0")
+    }
+
+    func appendDigit(str: String) {
+        if canAppendDigit {
+            RemoveZeroIfOnly()
+            self.numLabel.text?.append(str)
+            return
+        }
+
+        // 四則演算のボタンの選択状態を解除する
+        unSelectedNumOperationsButton()
+
+        // 新しく数値を入力し直す
+        self.numLabel.text? = str
+        
+        canAppendDigit = true
+    }
+    
+    /* イコール のアクションメソッド */
+    func onPushedEqual() {
+        var result = 0.0
+        let inputtingNum = convertLabelToDouble(str: self.numLabel.text)
+        switch self.lastPushedOperation {
+        case "+":
+            result = inputtingNum + (self.secondInputtedNum ?? self.firstInputtedNum)
+            break
+        default:
+            break
+        }
+
+        /*
+         TODO: コメント内容を精査
+         1 + 2 = = -> 5 を対応するため
+         この処理を入れないと 1 + 2 = = -> 4 になり、2回目に入力した「2」という数字を保持しておく必要がある
+         */
+        if self.secondInputtedNum == nil {
+            self.secondInputtedNum = inputtingNum
+        }
+
+        // 小数点部分が全て0なら整数として扱う
+        if compareNealyInteger(num: result) {
+            self.numLabel.text = String(Int(result))
+        } else {
+            self.numLabel.text = String(result)
+        }
+
+        // 四則演算のボタンの選択状態を解除する
+        unSelectedNumOperationsButton()
+        
+        canAppendDigit = false
+    }
+    
+    // 小数部分が全て0かどうか返す
+    func compareNealyInteger(num: Double) -> Bool {
+        return abs(num.truncatingRemainder(dividingBy: 1.0)).isLess(than: .ulpOfOne)
+    }
+    
+    /* 四則演算 のアクションメソッド */
+    func onPushedAddition() {
+        if self.additionButton.isSelected {
+            return
+        }
+        self.additionButton.isSelected = true
+        self.lastPushedOperation = "+"
+        self.secondInputtedNum = nil
+        self.canAppendDigit = false
+        saveInputingNumber()
+    }
+    
+    func saveInputingNumber() {
+        self.firstInputtedNum = convertLabelToDouble(str: self.numLabel.text)
     }
     
     /* その他(AC, ±, %) のアクションメソッド */
     func onPushedAllClear() {
         self.numLabel.text? = "0"
+        self.lastPushedOperation = "None"
+        self.firstInputtedNum = 0.0
+        self.secondInputtedNum = nil
+        self.canAppendDigit = true
     }
     func onPushedPercent() {
         if self.numLabel.text == "0" {
@@ -165,4 +248,21 @@ class ViewController: UIViewController {
             self.numLabel.text?.remove(at: zeroIndex)
         }
     }
+    
+    func unSelectedNumOperationsButton() {
+        if additionButton.isSelected {
+            additionButton.isSelected = false
+        }
+    }
+
+    func convertLabelToDouble(str: String?) -> Double {
+        guard let text = self.numLabel.text else {
+            return 0.0
+        }
+        guard let num = Double(text) else {
+            return 0.0
+        }
+        return num
+    }
+
 }
