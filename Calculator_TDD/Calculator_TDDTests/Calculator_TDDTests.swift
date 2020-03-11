@@ -737,4 +737,49 @@ class Calculator_TDDTests: XCTestCase {
         result = viewController.numLabel.text ?? ""
         XCTAssertEqual(result, "9.5312903", "88.641 / 9.3 = is incorrct")
     }
+    
+    func testIrregularOperation() {
+        // 8 * 9 / -> 72
+        viewController.onPushedEight()
+        viewController.onPushedMultiplication()
+        viewController.onPushedNine()
+        viewController.onPushedDivision()
+        var result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "72", "8 * 9 / is incorrct")
+        
+        viewController.onPushedAllClear()
+        
+        // 4 * 5 = / 10 = -> 2
+        viewController.onPushedFour()
+        viewController.onPushedMultiplication()
+        viewController.onPushedFive()
+        viewController.onPushedEqual()
+        viewController.onPushedDivision()
+        viewController.onPushedOne()
+        viewController.onPushedZero()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "2", "4 * 5 / 10 = is incorrct")
+        
+        // 2 * 4 / = -> 1
+        viewController.onPushedTwo()
+        viewController.onPushedMultiplication()
+        viewController.onPushedFour()
+        viewController.onPushedDivision()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "1", "2 * 4 / = is incorrct")
+        
+        viewController.onPushedAllClear()
+        
+        // 2 * 4 / = = -> 0.125
+        viewController.onPushedTwo()
+        viewController.onPushedMultiplication()
+        viewController.onPushedFour()
+        viewController.onPushedDivision()
+        viewController.onPushedEqual()
+        viewController.onPushedEqual()
+        result = viewController.numLabel.text ?? ""
+        XCTAssertEqual(result, "0.125", "2 * 4 / = = is incorrct")
+    }
 }

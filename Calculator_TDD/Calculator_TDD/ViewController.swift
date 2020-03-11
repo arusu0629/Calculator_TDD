@@ -249,9 +249,9 @@ class ViewController: UIViewController {
         if self.secondInputtedNum == nil {
             self.secondInputtedNum = NSDecimalNumber(string: self.numLabel.text)
         }
-
-        // 小数点部分が全て0なら整数として扱う
-        if compareNealyInteger(num: result.doubleValue) {
+        
+        // 小数点部分が全て0なら整数として扱う またIntの上限値を超えていなかったらIntにキャストする
+        if compareNealyInteger(num: result.doubleValue) && result.doubleValue < Double(Int.max) {
             self.numLabel.text = String(Int(result.doubleValue))
         } else {
             self.numLabel.text = String(trim(_text: result.stringValue))
@@ -305,6 +305,9 @@ class ViewController: UIViewController {
     func onPushedNumOperationButtons(operationButton: UIButton, operation: String) {
         if operationButton.isSelected {
             return
+        }
+        if self.lastPushedOperation != "None" && self.secondInputtedNum == nil {
+            onPushedEqual()
         }
         self.unSelectedNumOperationsButton()
         operationButton.isSelected = true
