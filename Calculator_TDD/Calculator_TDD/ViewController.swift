@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var multiplicationButton: UIButton!
     @IBOutlet weak var divisionButton: UIButton!
     
+    let operationErrorStr = "エラー"
+    
     // 入力中の数値が小数かどうか
     var hasDecimalPointInNumLabel: Bool {
         return numLabel.text?.contains(".") ?? false
@@ -27,8 +29,8 @@ class ViewController: UIViewController {
     // 最後に押された四則演算記号
     var lastPushedOperation: String = "None"
     
-    var firstInputtedNum: Double = 0.0
-    var secondInputtedNum: Double? = nil
+    var firstInputtedNum: NSDecimalNumber = NSDecimalNumber()
+    var secondInputtedNum: NSDecimalNumber? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +70,7 @@ class ViewController: UIViewController {
     
     /* 小数点(.) */
     @IBAction func pushedDot(_ sender: Any) {
+        onPushedDot()
     }
     
     /* イコールと四則演算 */
@@ -146,47 +149,91 @@ class ViewController: UIViewController {
         canAppendDigit = true
     }
     
+    // .(小数点)を押したときの挙動
+    func onPushedDot() {
+        // すでに小数点が入っている場合
+        if hasDecimalPointInNumLabel {
+            return
+        }
+        if canAppendDigit {
+            self.numLabel.text?.append(".")
+            return
+        }
+        self.numLabel.text?.append("0.")
+        unSelectedNumOperationsButton()
+        canAppendDigit = true
+    }
+    
     /* イコール のアクションメソッド */
     func onPushedEqual() {
-        var result = 0.0
-        let inputtingNum = convertLabelToDouble(str: self.numLabel.text)
+        // "エラー"と表示されているときの処理
+        if self.firstInputtedNum.doubleValue.isNaN {
+            exceptionOperation()
+            return
+        }
+        if let secondInputtedNum = self.secondInputtedNum {
+            if secondInputtedNum.doubleValue.isNaN {
+                exceptionOperation()
+                return
+            }
+        }
+        
+        var result = NSDecimalNumber()
+        var n1 = NSDecimalNumber()
+        var n2 = NSDecimalNumber()
         switch self.lastPushedOperation {
         case "+":
-            result = (self.secondInputtedNum ?? self.firstInputtedNum) + inputtingNum
+            if let secondInputtedNum = self.secondInputtedNum {
+                n1 = secondInputtedNum
+                n2 = NSDecimalNumber(string: self.numLabel.text)
+            } else {
+                n1 = self.firstInputtedNum
+                n2 = NSDecimalNumber(string: self.numLabel.text)
+            }
+            result = n1.adding(n2)
             break
         case "-":
             if let secondInputtedNum = self.secondInputtedNum {
-                result = inputtingNum - secondInputtedNum
+                n1 = NSDecimalNumber(string: self.numLabel.text)
+                n2 = secondInputtedNum
+                result = n1.subtracting(n2)
             } else {
-                result = self.firstInputtedNum - inputtingNum
+                n1 = self.firstInputtedNum
+                n2 = NSDecimalNumber(string: self.numLabel.text)
+                result = n1.subtracting(n2)
             }
             break
         case "*":
             if let secondInputtedNum = self.secondInputtedNum {
-                result = inputtingNum * secondInputtedNum
+                n1 = NSDecimalNumber(string: self.numLabel.text)
+                n2 = secondInputtedNum
+                result = n1.multiplying(by: n2)
             } else {
-                result = self.firstInputtedNum * inputtingNum
+                n1 = self.firstInputtedNum
+                n2 = NSDecimalNumber(string: self.numLabel.text)
+                result = n1.multiplying(by: n2)
             }
             break
         case "/":
             if let secondInputtedNum = self.secondInputtedNum {
-                if secondInputtedNum == 0 {
-                    self.numLabel.text = "エラー"
-                    unSelectedNumOperationsButton()
-                    canAppendDigit = false
+                if secondInputtedNum.doubleValue == 0.0 {
+                    exceptionOperation()
                     return
                 } else {
-                    result = inputtingNum / secondInputtedNum
+                    n1 = NSDecimalNumber(string: self.numLabel.text)
+                    n2 = secondInputtedNum
+                    result = n1.dividing(by: n2)
                 }
             } else {
-                if inputtingNum == 0 {
-                    self.numLabel.text = "エラー"
-                    unSelectedNumOperationsButton()
-                    canAppendDigit = false
-                    self.secondInputtedNum = inputtingNum
+                let inputtedNumber = NSDecimalNumber(string: self.numLabel.text)
+                if inputtedNumber.doubleValue == 0 {
+                    self.secondInputtedNum = inputtedNumber
+                    exceptionOperation()
                     return
                 } else {
-                    result = self.firstInputtedNum / inputtingNum
+                    n1 = self.firstInputtedNum
+                    n2 = NSDecimalNumber(string: self.numLabel.text)
+                    result = n1.dividing(by: n2)
                 }
             }
             break
@@ -200,14 +247,14 @@ class ViewController: UIViewController {
          この処理を入れないと 1 + 2 = = -> 4 になり、2回目に入力した「2」という数字を保持しておく必要がある
          */
         if self.secondInputtedNum == nil {
-            self.secondInputtedNum = inputtingNum
+            self.secondInputtedNum = NSDecimalNumber(string: self.numLabel.text)
         }
 
         // 小数点部分が全て0なら整数として扱う
-        if compareNealyInteger(num: result) {
-            self.numLabel.text = String(Int(result))
+        if compareNealyInteger(num: result.doubleValue) {
+            self.numLabel.text = String(Int(result.doubleValue))
         } else {
-            self.numLabel.text = String(result)
+            self.numLabel.text = String(trim(_text: result.stringValue))
         }
 
         // 四則演算のボタンの選択状態を解除する
@@ -216,9 +263,29 @@ class ViewController: UIViewController {
         canAppendDigit = false
     }
     
+    func exceptionOperation() {
+        self.numLabel.text = operationErrorStr
+        unSelectedNumOperationsButton()
+        canAppendDigit = false
+    }
+    
     // 小数部分が全て0かどうか返す
     func compareNealyInteger(num: Double) -> Bool {
         return abs(num.truncatingRemainder(dividingBy: 1.0)).isLess(than: .ulpOfOne)
+    }
+    
+    // 小数点以下の桁数をトリムする
+    func trim(_text: String, digit: Int = 8) -> String {
+        var text = _text
+        if text.count <= digit {
+            return text
+        }
+        if !text.contains(".") {
+            return text
+        }
+        let removeFirstIndex = text.index(text.firstIndex(of: ".")!, offsetBy: digit)
+        text.removeSubrange(removeFirstIndex..<text.endIndex)
+        return text
     }
     
     /* 四則演算 のアクションメソッド */
@@ -239,6 +306,7 @@ class ViewController: UIViewController {
         if operationButton.isSelected {
             return
         }
+        self.unSelectedNumOperationsButton()
         operationButton.isSelected = true
         self.secondInputtedNum = nil
         self.canAppendDigit = false
@@ -247,7 +315,7 @@ class ViewController: UIViewController {
     }
 
     func saveInputingNumber() {
-        self.firstInputtedNum = convertLabelToDouble(str: self.numLabel.text)
+        self.firstInputtedNum = NSDecimalNumber(string: self.numLabel.text)
     }
     
     /* その他(AC, ±, %) のアクションメソッド */
@@ -284,6 +352,10 @@ class ViewController: UIViewController {
     }
 
     func RemoveZeroIfOnly() {
+        if hasDecimalPointInNumLabel {
+            return
+        }
+        
         guard var text = self.numLabel.text else {
             return
         }
